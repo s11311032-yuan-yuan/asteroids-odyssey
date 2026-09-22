@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Asteroids Odyssey - 漫遊星空奧德賽</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="gameContainer">
+  <div id="gameWrap">
+    <canvas id="game" width="800" height="600"></canvas>
+    
+    <!-- Top Header HUD -->
+    <div id="hud">
+      <div class="hud-left">
+        <div class="hud-item"><span class="label" data-i18n="ui.score">SCORE</span> <span id="score">0</span></div>
+        <div class="hud-item"><span class="label" data-i18n="ui.level">LEVEL</span> <span id="levelNumber">1</span>/5</div>
+      </div>
+
+      <!-- Objective Tracker -->
+      <div id="objectiveWrap">
+        <div id="objectiveText" class="objective-label">...</div>
+        <div id="objectiveMeter"><div id="objectiveBar"></div></div>
+      </div>
+
+      <div class="hud-right">
+        <!-- Fire Cooldown -->
+        <div class="hud-item center-meter">
+          <span class="label" data-i18n="ui.cooldown">FIRE CD</span>
+          <div id="cooldownMeter"><div id="cooldownBar"></div></div>
+        </div>
+
+        <!-- Hi-score -->
+        <div class="hud-item"><span class="label" data-i18n="ui.hiscore">HI-SCORE</span> <span id="hiscore">0</span></div>
+
+        <!-- Language Switcher -->
+        <div class="hud-item lang-wrap">
+          <select id="langSelect" aria-label="Select Language">
+            <option value="zh-TW">繁體中文</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="zh-CN">简体中文</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lives Display -->
+    <div id="lives"></div>
+
+    <!-- Boss Health Bar -->
+    <div id="bossHealthWrap">
+      <span id="bossHpText" class="boss-title" data-i18n="ui.bossHp">LEVIATHAN CORE</span>
+      <div id="bossHpMeter"><div id="bossHpBar"></div></div>
+    </div>
+
+    <!-- Controls Hint -->
+    <div id="startHint">方向鍵 / WASD 移動旋轉・空白鍵射擊・滑鼠移動可轉向瞄準・左鍵發射</div>
+
+    <!-- Story Dialogue Cutscene Overlay -->
+    <div id="storyOverlay">
+      <div class="story-box">
+        <div class="story-header">
+          <span id="storyChapterTitle">Chapter 1</span>
+          <button id="storySkipBtn" class="btn-secondary" data-i18n="ui.skip">SKIP</button>
+        </div>
+        <div class="story-body">
+          <div id="storyAvatar" class="avatar-box avatar-commander">👩‍✈️</div>
+          <div class="story-dialog-content">
+            <div id="storySpeaker" class="speaker-commander">Cmdr. Evelyn</div>
+            <div id="storyText" class="dialogue-text">...</div>
+          </div>
+        </div>
+        <div class="story-footer">
+          <button id="storyNextBtn" class="btn-primary" data-i18n="ui.continue">CONTINUE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage Clear Modal -->
+    <div id="stageClearOverlay">
+      <div class="modal-card">
+        <h1 data-i18n="ui.stageClear">SECTOR CLEARED!</h1>
+        <p data-i18n="ui.stageClearDesc">Flight path secure. Priming hyperdrive for the next sector.</p>
+        <button id="stageClearNextBtn" class="btn-primary glow-btn" data-i18n="ui.nextLevel">NEXT STAGE</button>
+      </div>
+    </div>
+
+    <!-- Victory Overlay -->
+    <div id="victoryOverlay">
+      <div class="modal-card victory-card">
+        <h1 class="victory-title" data-i18n="ui.victory">MISSION ACCOMPLISHED</h1>
+        <p class="victory-desc" data-i18n="ui.victoryDesc">You neutralized the Leviathan Core and saved the fleet!</p>
+        <div class="score-line"><span data-i18n="ui.score">SCORE</span>: <span id="victoryScore">0</span></div>
+        <button id="victoryRestartBtn" class="btn-primary glow-btn" data-i18n="ui.restartHint">PLAY AGAIN</button>
+      </div>
+    </div>
+
+    <!-- Game Over Overlay -->
+    <div id="overlay">
+      <div class="modal-card">
+        <h1 data-i18n="ui.gameOver">GAME OVER</h1>
+        <div class="score-line"><span data-i18n="ui.score">SCORE</span>: <span id="finalScore">0</span></div>
+        <div class="score-line"><span data-i18n="ui.hiscore">HI-SCORE</span>: <span id="finalHi">0</span></div>
+        <div class="hint" data-i18n="ui.restartHint">Press SPACE or Click to Restart</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
