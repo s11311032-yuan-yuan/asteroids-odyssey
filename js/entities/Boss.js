@@ -1,6 +1,7 @@
 import { Entity } from './Entity.js';
 import { CONFIG } from '../config.js';
 import { Physics } from '../systems/Physics.js';
+import { SoundSystem } from '../systems/SoundSystem.js';
 
 /**
  * Boss Entity: The Leviathan Core (Chapter 5)
@@ -89,6 +90,7 @@ export class Boss extends Entity {
   }
 
   _fireBarrage(player) {
+    SoundSystem.playBossLaser();
     const angleToPlayer = Math.atan2(player.y - this.y, player.x - this.x);
     const speed = this.enraged ? 3.8 : 3.0;
 

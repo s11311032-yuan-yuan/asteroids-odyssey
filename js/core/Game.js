@@ -10,6 +10,7 @@ import { Physics } from '../systems/Physics.js';
 import { HUD } from '../ui/HUD.js';
 import { StoryOverlay } from '../ui/StoryOverlay.js';
 import { I18n } from '../i18n/I18n.js';
+import { SoundSystem } from '../systems/SoundSystem.js';
 
 /**
  * Main game coordinator class managing campaign progression, boss battles,
@@ -47,6 +48,15 @@ export class Game {
       this.hud.refreshTexts();
       this.updateObjectiveUI();
     });
+
+    // Unlock Web Audio Context on first interaction
+    const unlockAudio = () => {
+      SoundSystem.init();
+      window.removeEventListener('keydown', unlockAudio);
+      window.removeEventListener('pointerdown', unlockAudio);
+    };
+    window.addEventListener('keydown', unlockAudio);
+    window.addEventListener('pointerdown', unlockAudio);
 
     // Action listener (fire / restart)
     this.input.onAction((action) => {
@@ -144,6 +154,7 @@ export class Game {
 
   gameOver() {
     this.state = 'over';
+    SoundSystem.playGameOver();
     if (this.score > this.hiscore) {
       this.hiscore = this.score;
       this._saveHiScore();
@@ -159,6 +170,7 @@ export class Game {
     if (this.levels.currentLevel >= this.levels.maxLevel) {
       // Victory!
       this.state = 'victory';
+      SoundSystem.playVictory();
       if (this.score > this.hiscore) {
         this.hiscore = this.score;
         this._saveHiScore();
@@ -167,6 +179,7 @@ export class Game {
       this.hud.showVictory(this.score, () => this.resetGame());
     } else {
       // Next stage
+      SoundSystem.playStageClear();
       this.hud.showStageClear(() => {
         this._startChapter(this.levels.currentLevel + 1);
       });
@@ -186,6 +199,7 @@ export class Game {
           bullets.splice(j, 1);
           asteroids.splice(i, 1);
 
+          SoundSystem.playExplosion(a.size);
           const points = this.enemies.splitAsteroid(a, this.particles);
           this.score += points;
           this.hud.updateScore(this.score);
@@ -216,6 +230,7 @@ export class Game {
           if (Physics.distance(b.x, b.y, sx, sy) < (b.r + s.size)) {
             bullets.splice(j, 1);
             hitShield = true;
+            SoundSystem.playBossHit(true);
             this.particles.spawnDebris(sx, sy, 4, '#06b6d4');
             break;
           }
@@ -226,6 +241,7 @@ export class Game {
         if (Physics.distance(b.x, b.y, this.boss.x, this.boss.y) < (b.r + this.boss.r)) {
           bullets.splice(j, 1);
           const bossDead = this.boss.takeDamage(2);
+          SoundSystem.playBossHit(false);
           this.hud.updateBossHealth(this.boss.getHpRatio());
           this.particles.spawnDebris(b.x, b.y, 6, '#c084fc');
           this.particles.triggerScreenShake(5, 8);
@@ -233,6 +249,7 @@ export class Game {
           if (bossDead) {
             this.score += 1500;
             this.hud.updateScore(this.score);
+            SoundSystem.playBossExplosion();
             this.particles.spawnDebris(this.boss.x, this.boss.y, 40, '#ff0055');
             this.particles.triggerScreenShake(15, 30);
             this.onStageCleared();
@@ -275,6 +292,7 @@ export class Game {
 
   damagePlayer() {
     this.lives--;
+    SoundSystem.playPlayerHit();
     this.particles.spawnDebris(this.player.x, this.player.y, 16, CONFIG.SHIP.COLORS.BODY);
     this.particles.triggerScreenShake(10, 16);
     this.hud.triggerScreenShake();

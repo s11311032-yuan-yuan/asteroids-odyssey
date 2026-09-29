@@ -139,6 +139,33 @@ canvas {
   transition: width 0.05s ease-out;
 }
 
+/* Sound Toggle */
+.sound-wrap {
+  pointer-events: auto;
+}
+
+.sound-btn {
+  background: rgba(10, 16, 26, 0.85);
+  color: #4dfcc4;
+  border: 1px solid #4dfcc4;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 0 6px rgba(77, 252, 196, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.sound-btn:hover {
+  background: rgba(20, 32, 50, 0.95);
+  box-shadow: 0 0 10px rgba(77, 252, 196, 0.6);
+  transform: scale(1.05);
+}
+
 /* Language Selector */
 .lang-wrap {
   pointer-events: auto;

@@ -1,8 +1,9 @@
 import { I18n } from '../i18n/I18n.js';
+import { SoundSystem } from '../systems/SoundSystem.js';
 
 /**
  * Manages UI updates, score display, cooldown meters, level progress, boss health bar,
- * victory overlay, and dynamic language updates.
+ * victory overlay, sound toggle, and dynamic language updates.
  */
 export class HUD {
   constructor() {
@@ -31,8 +32,30 @@ export class HUD {
 
     this.langSelectEl = document.getElementById('langSelect');
     this.startHintEl = document.getElementById('startHint');
+    this.soundToggleBtn = document.getElementById('soundToggleBtn');
 
     this._setupLanguageSelector();
+    this._setupSoundToggle();
+  }
+
+  _setupSoundToggle() {
+    if (!this.soundToggleBtn) return;
+
+    const updateBtn = () => {
+      const muted = SoundSystem.isMuted();
+      this.soundToggleBtn.textContent = muted ? '🔇' : '🔊';
+      const labelKey = muted ? 'ui.soundOff' : 'ui.soundOn';
+      this.soundToggleBtn.title = I18n.t(labelKey);
+      this.soundToggleBtn.setAttribute('aria-label', I18n.t(labelKey));
+    };
+
+    updateBtn();
+    this.soundToggleBtn.addEventListener('click', () => {
+      SoundSystem.toggleMute();
+      updateBtn();
+    });
+
+    this.updateSoundBtn = updateBtn;
   }
 
   _setupLanguageSelector() {
@@ -63,6 +86,9 @@ export class HUD {
     }
     if (this.bossTextEl) {
       this.bossTextEl.textContent = I18n.t('ui.bossHp');
+    }
+    if (this.updateSoundBtn) {
+      this.updateSoundBtn();
     }
   }
 

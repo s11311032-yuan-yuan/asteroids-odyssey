@@ -17,7 +17,9 @@ export const TRANSLATIONS = {
       skip: '略過對話',
       controlsHint: '方向鍵 / WASD 移動・空白鍵射擊・滑鼠瞄準與點擊發射',
       stageClear: '關卡突破！',
-      stageClearDesc: '航道清理完畢，準備躍遷進入下一星區。'
+      stageClearDesc: '航道清理完畢，準備躍遷進入下一星區。',
+      soundOn: '音效：開啟',
+      soundOff: '音效：靜音'
     },
     characters: {
       commander: '伊芙琳 指揮官',
@@ -89,7 +91,9 @@ export const TRANSLATIONS = {
       skip: 'SKIP',
       controlsHint: 'Arrows / WASD to Move・SPACE to Fire・Mouse to Aim & Shoot',
       stageClear: 'SECTOR CLEARED!',
-      stageClearDesc: 'Flight path secure. Priming hyperdrive for the next sector.'
+      stageClearDesc: 'Flight path secure. Priming hyperdrive for the next sector.',
+      soundOn: 'SOUND: ON',
+      soundOff: 'SOUND: MUTED'
     },
     characters: {
       commander: 'Cmdr. Evelyn',
@@ -161,7 +165,9 @@ export const TRANSLATIONS = {
       skip: 'スキップ',
       controlsHint: '方向キー/WASDで移動・スペースで射撃・マウスで照準＆射撃',
       stageClear: '作戦成功！',
-      stageClearDesc: '航路の安全を確保。次の宙域へのワープ準備完了。'
+      stageClearDesc: '航路の安全を確保。次の宙域へのワープ準備完了。',
+      soundOn: 'サウンド：ON',
+      soundOff: 'サウンド：OFF'
     },
     characters: {
       commander: 'エヴリン司令官',
@@ -233,7 +239,9 @@ export const TRANSLATIONS = {
       skip: '跳过对话',
       controlsHint: '方向键 / WASD 移动・空格键射击・鼠标瞄准与点击发射',
       stageClear: '关卡突破！',
-      stageClearDesc: '航道清理完毕，准备跃迁进入下一星区。'
+      stageClearDesc: '航道清理完毕，准备跃迁进入下一星区。',
+      soundOn: '音效：开启',
+      soundOff: '音效：静音'
     },
     characters: {
       commander: '伊芙琳 指挥官',

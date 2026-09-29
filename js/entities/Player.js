@@ -1,6 +1,7 @@
 import { Entity } from './Entity.js';
 import { CONFIG } from '../config.js';
 import { Physics } from '../systems/Physics.js';
+import { SoundSystem } from '../systems/SoundSystem.js';
 
 /**
  * Player ship and projectile entity management.
@@ -12,6 +13,7 @@ export class Player extends Entity {
   }
 
   reset() {
+    SoundSystem.stopThrust();
     this.x = CONFIG.CANVAS.WIDTH / 2;
     this.y = CONFIG.CANVAS.HEIGHT / 2;
     this.vx = 0;
@@ -24,6 +26,7 @@ export class Player extends Entity {
   }
 
   respawn() {
+    SoundSystem.stopThrust();
     this.x = CONFIG.CANVAS.WIDTH / 2;
     this.y = CONFIG.CANVAS.HEIGHT / 2;
     this.vx = 0;
@@ -54,6 +57,7 @@ export class Player extends Entity {
       life: CONFIG.WEAPON.BULLET_LIFETIME
     };
     this.bullets.push(bullet);
+    SoundSystem.playLaser();
     return true;
   }
 
@@ -80,6 +84,9 @@ export class Player extends Entity {
       this.vx += Math.cos(this.angle) * thrust;
       this.vy += Math.sin(this.angle) * thrust;
       this.thrusting = true;
+      SoundSystem.playThrust();
+    } else {
+      SoundSystem.stopThrust();
     }
 
     if (inputHandler.isReverse()) {

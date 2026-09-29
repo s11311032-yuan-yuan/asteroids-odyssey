@@ -1,4 +1,5 @@
 import { I18n } from '../i18n/I18n.js';
+import { SoundSystem } from '../systems/SoundSystem.js';
 
 /**
  * Visual novel style narrative cutscene overlay for mission briefings and debriefings.
@@ -106,14 +107,18 @@ export class StoryOverlay {
     this.typewriterTimer = setInterval(() => {
       charIndex++;
       this.textEl.textContent = this.currentFullText.slice(0, charIndex);
+      if (charIndex % 2 === 0) {
+        SoundSystem.playTypewriter();
+      }
       if (charIndex >= this.currentFullText.length) {
         clearInterval(this.typewriterTimer);
         this.isTyping = false;
       }
-    }, 20);
+    }, 22);
   }
 
   advance() {
+    SoundSystem.playTypewriter();
     if (this.isTyping) {
       // Instant reveal
       clearInterval(this.typewriterTimer);
