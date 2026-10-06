@@ -33,6 +33,8 @@ export class HUD {
     this.langSelectEl = document.getElementById('langSelect');
     this.startHintEl = document.getElementById('startHint');
     this.soundToggleBtn = document.getElementById('soundToggleBtn');
+    this.titleOverlayEl = document.getElementById('titleOverlay');
+    this.startMissionBtn = document.getElementById('startMissionBtn');
 
     this._setupLanguageSelector();
     this._setupSoundToggle();
@@ -147,6 +149,28 @@ export class HUD {
     this.gameWrapEl.classList.remove('screen-shake');
     void this.gameWrapEl.offsetWidth;
     this.gameWrapEl.classList.add('screen-shake');
+  }
+
+  showTitle(onStart) {
+    if (this.titleOverlayEl) {
+      this.titleOverlayEl.classList.add('show');
+    }
+    if (this.startMissionBtn && onStart) {
+      this.startMissionBtn.onclick = () => {
+        this.hideTitle();
+        onStart();
+      };
+    }
+  }
+
+  hideTitle() {
+    if (this.titleOverlayEl) {
+      this.titleOverlayEl.classList.remove('show');
+    }
+  }
+
+  isTitleActive() {
+    return this.titleOverlayEl ? this.titleOverlayEl.classList.contains('show') : false;
   }
 
   showGameOver(score, hiscore) {

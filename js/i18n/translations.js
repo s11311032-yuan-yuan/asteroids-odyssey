@@ -19,7 +19,18 @@ export const TRANSLATIONS = {
       stageClear: '關卡突破！',
       stageClearDesc: '航道清理完畢，準備躍遷進入下一星區。',
       soundOn: '音效：開啟',
-      soundOff: '音效：靜音'
+      soundOff: '音效：靜音',
+      gameTitle: 'ASTEROIDS ODYSSEY',
+      gameSubtitle: '深空奧德賽：星際艦隊防衛戰',
+      howToPlayTitle: '— 作戰指南 —',
+      guideMoveTitle: '推進與航行',
+      guideMoveDesc: 'WASD 或 方向鍵 推進轉向，滑鼠指引艦首瞄準',
+      guideFireTitle: '等離子火控',
+      guideFireDesc: '空白鍵 或 滑鼠左鍵 聚焦發射高速電漿雷射',
+      guideObjectiveTitle: '戰術任務',
+      guideObjectiveDesc: '擊碎小行星清理航道，突破5大星區並消滅母體核心',
+      startMissionBtn: '啟動任務 (START MISSION)',
+      pressToStartHint: '按下 空白鍵 或 點擊按鈕啟動戰艦'
     },
     characters: {
       commander: '伊芙琳 指揮官',
@@ -93,7 +104,18 @@ export const TRANSLATIONS = {
       stageClear: 'SECTOR CLEARED!',
       stageClearDesc: 'Flight path secure. Priming hyperdrive for the next sector.',
       soundOn: 'SOUND: ON',
-      soundOff: 'SOUND: MUTED'
+      soundOff: 'SOUND: MUTED',
+      gameTitle: 'ASTEROIDS ODYSSEY',
+      gameSubtitle: 'Deep Space Odyssey: Fleet Defense Campaign',
+      howToPlayTitle: '— HOW TO PLAY —',
+      guideMoveTitle: 'Flight & Steering',
+      guideMoveDesc: 'WASD / Arrow Keys to thrust & rotate / Mouse to steer ship',
+      guideFireTitle: 'Plasma Fire Control',
+      guideFireDesc: 'SPACEBAR or Left Mouse Click to fire plasma laser bursts',
+      guideObjectiveTitle: 'Tactical Mission',
+      guideObjectiveDesc: 'Destroy asteroids to clear flight paths, advance 5 sectors, defeat the Boss',
+      startMissionBtn: 'START MISSION',
+      pressToStartHint: 'Press SPACE or Click to launch ship'
     },
     characters: {
       commander: 'Cmdr. Evelyn',
@@ -167,7 +189,18 @@ export const TRANSLATIONS = {
       stageClear: '作戦成功！',
       stageClearDesc: '航路の安全を確保。次の宙域へのワープ準備完了。',
       soundOn: 'サウンド：ON',
-      soundOff: 'サウンド：OFF'
+      soundOff: 'サウンド：OFF',
+      gameTitle: 'ASTEROIDS ODYSSEY',
+      gameSubtitle: '深宇宙オデッセイ：船団防衛作戦',
+      howToPlayTitle: '— 操縦マニュアル —',
+      guideMoveTitle: '推進と旋回',
+      guideMoveDesc: 'WASD / 方向キーで加速・旋回、マウスで照準誘導',
+      guideFireTitle: 'プラズマ火器管制',
+      guideFireDesc: 'スペースキー または 左クリックでプラズマ連射',
+      guideObjectiveTitle: '作戦目的',
+      guideObjectiveDesc: '小惑星を破砕して航路を確保、全5セクター突破＆母体コア殲滅',
+      startMissionBtn: '作戦開始 (START MISSION)',
+      pressToStartHint: 'スペースキーまたはクリックで発進'
     },
     characters: {
       commander: 'エヴリン司令官',
@@ -241,7 +274,18 @@ export const TRANSLATIONS = {
       stageClear: '关卡突破！',
       stageClearDesc: '航道清理完毕，准备跃迁进入下一星区。',
       soundOn: '音效：开启',
-      soundOff: '音效：静音'
+      soundOff: '音效：静音',
+      gameTitle: 'ASTEROIDS ODYSSEY',
+      gameSubtitle: '深空奥德赛：星际舰队防卫战',
+      howToPlayTitle: '— 作战指南 —',
+      guideMoveTitle: '推进与航行',
+      guideMoveDesc: 'WASD 或 方向键 推进转向，鼠标指引舰首瞄准',
+      guideFireTitle: '等离子火控',
+      guideFireDesc: '空格键 或 鼠标左键 聚焦发射高速电浆激光',
+      guideObjectiveTitle: '战术任务',
+      guideObjectiveDesc: '击碎小行星清理航道，突破5大星区并消灭母体核心',
+      startMissionBtn: '启动任务 (START MISSION)',
+      pressToStartHint: '按下 空格键 或 点击按钮启动战舰'
     },
     characters: {
       commander: '伊芙琳 指挥官',

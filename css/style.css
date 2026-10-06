@@ -73,7 +73,7 @@ canvas {
   font-weight: 700;
   text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
   user-select: none;
-  z-index: 10;
+  z-index: 50;
   pointer-events: none;
 }
 
@@ -492,6 +492,157 @@ button {
   background: linear-gradient(90deg, #38bdf8, #a5f3fc);
   box-shadow: 0 0 30px rgba(0, 240, 255, 1.0);
   transform: scale(1.04);
+}
+
+/* ---------- Title Screen & Tutorial Overlay ---------- */
+#titleOverlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(3, 7, 18, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #e2f1ff;
+  text-align: center;
+  z-index: 45;
+  padding: 16px;
+}
+
+#titleOverlay.show {
+  display: flex;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.title-card {
+  position: relative;
+  background: rgba(8, 14, 28, 0.96);
+  border: 2px solid #00f0ff;
+  border-radius: 10px;
+  box-shadow: 
+    0 0 50px rgba(0, 240, 255, 0.4),
+    inset 0 0 30px rgba(0, 240, 255, 0.12);
+  padding: 24px 32px;
+  max-width: 680px;
+  width: 95%;
+  overflow: hidden;
+}
+
+.title-badge {
+  font-family: 'Orbitron', monospace;
+  font-size: 10.5px;
+  letter-spacing: 3px;
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  padding: 3px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.game-logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 36px;
+  font-weight: 900;
+  color: #00f0ff;
+  text-shadow: 0 0 24px rgba(0, 240, 255, 0.9);
+  letter-spacing: 3px;
+  margin-bottom: 4px;
+}
+
+.game-sublogo {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.how-to-play-box {
+  background: rgba(10, 18, 36, 0.75);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.guide-header {
+  font-family: 'Orbitron', monospace;
+  font-size: 12.5px;
+  color: #ffd000;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 208, 0, 0.7);
+}
+
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.guide-card {
+  background: rgba(13, 24, 46, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.guide-card:hover {
+  border-color: #00f0ff;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.guide-icon {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.guide-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #00f0ff;
+  margin-bottom: 3px;
+  letter-spacing: 1px;
+}
+
+.guide-desc {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+.title-start-btn {
+  margin-top: 10px !important;
+  padding: 10px 30px !important;
+  font-size: 14px !important;
+}
+
+.title-hint {
+  font-family: 'Rajdhani', sans-serif;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 1px;
+  animation: blink 1.2s infinite;
 }
 
 /* ---------- Modals & Overlays ---------- */

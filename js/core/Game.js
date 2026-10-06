@@ -31,8 +31,8 @@ export class Game {
     this.levels = new LevelManager();
     this.boss = null;
 
-    // Game state: 'idle' | 'briefing' | 'playing' | 'cleared' | 'over' | 'victory'
-    this.state = 'idle';
+    // Game state: 'title' | 'briefing' | 'playing' | 'cleared' | 'over' | 'victory'
+    this.state = 'title';
     this.score = 0;
     this.lives = CONFIG.SHIP.INITIAL_LIVES;
     this.hiscore = this._loadHiScore();
@@ -58,14 +58,24 @@ export class Game {
     window.addEventListener('keydown', unlockAudio);
     window.addEventListener('pointerdown', unlockAudio);
 
-    // Action listener (fire / restart)
+    // Action listener (fire / restart / start mission)
     this.input.onAction((action) => {
       if (action === 'fireOrRestart') {
-        if (this.state === 'over') {
+        if (this.state === 'title') {
+          this.launchCampaign();
+        } else if (this.state === 'over') {
           this.resetGame();
         } else if (this.state === 'playing') {
           this.player.fire();
         }
+      }
+    });
+
+    // Space or Enter key on title screen to launch campaign
+    window.addEventListener('keydown', (e) => {
+      if ((e.code === 'Space' || e.code === 'Enter') && this.state === 'title') {
+        e.preventDefault();
+        this.launchCampaign();
       }
     });
 
@@ -91,8 +101,22 @@ export class Game {
   }
 
   start() {
-    this.resetGame();
+    this.showTitleScreen();
     this.loop.start();
+  }
+
+  showTitleScreen() {
+    this.state = 'title';
+    this.hud.showTitle(() => {
+      this.launchCampaign();
+    });
+  }
+
+  launchCampaign() {
+    if (this.state !== 'title') return;
+    SoundSystem.init();
+    this.hud.hideTitle();
+    this.resetGame();
   }
 
   resetGame() {
@@ -105,6 +129,7 @@ export class Game {
     this.particles.clear();
     this.boss = null;
 
+    this.hud.hideTitle();
     this.hud.hideGameOver();
     this.hud.hideStageClear();
     this.hud.hideVictory();
@@ -337,7 +362,7 @@ export class Game {
     // Clear and draw background starfield
     this.particles.drawStars(this.ctx);
 
-    if (this.state !== 'idle') {
+    if (this.state !== 'idle' && this.state !== 'title') {
       this.enemies.draw(this.ctx);
       if (this.boss) this.boss.draw(this.ctx);
       this.player.drawBullets(this.ctx);
