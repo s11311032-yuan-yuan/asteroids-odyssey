@@ -293,8 +293,9 @@ export class Game {
   damagePlayer() {
     this.lives--;
     SoundSystem.playPlayerHit();
-    this.particles.spawnDebris(this.player.x, this.player.y, 16, CONFIG.SHIP.COLORS.BODY);
-    this.particles.triggerScreenShake(10, 16);
+    this.particles.spawnDebris(this.player.x, this.player.y, 22, CONFIG.SHIP.COLORS.PRIMARY_NEON);
+    this.particles.triggerScreenShake(12, 18);
+    this.particles.triggerGlitch(14);
     this.hud.triggerScreenShake();
     this.hud.renderLives(this.lives);
 
@@ -307,7 +308,7 @@ export class Game {
 
   update(dt = 1.0) {
     if (this.state === 'playing') {
-      this.player.update(this.input, dt);
+      this.player.update(this.input, dt, this.particles);
       this.enemies.update(dt);
       if (this.boss) this.boss.update(this.player, dt);
       this.particles.update(dt);
@@ -323,9 +324,14 @@ export class Game {
 
   render() {
     const shake = this.particles.getShakeOffset();
+    const glitch = this.particles.getGlitchActive();
+
     this.ctx.save();
     if (shake.x !== 0 || shake.y !== 0) {
       this.ctx.translate(shake.x, shake.y);
+    }
+    if (glitch) {
+      this.ctx.translate((Math.random() - 0.5) * 6, (Math.random() - 0.5) * 2);
     }
 
     // Clear and draw background starfield

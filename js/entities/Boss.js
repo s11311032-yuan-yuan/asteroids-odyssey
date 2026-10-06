@@ -125,56 +125,145 @@ export class Boss extends Entity {
     ctx.save();
     ctx.translate(this.x, this.y);
 
-    // Glow aura
-    ctx.shadowBlur = this.enraged ? 25 : 16;
-    ctx.shadowColor = this.enraged ? '#ff2a55' : '#a855f7';
+    const coreColor = this.enraged ? CONFIG.BOSS.COLORS.CORE_ENRAGED : CONFIG.BOSS.COLORS.CORE_NORMAL;
+    const ringColor = this.enraged ? '#ff0055' : CONFIG.BOSS.COLORS.RING;
 
-    // Outer rotating crystal ring
+    // 1. Ambient Energy Aura
+    const pulse = Math.sin(Date.now() * 0.006) * 6;
+    const auraGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, this.r * 1.35 + pulse);
+    auraGrad.addColorStop(0, this.enraged ? 'rgba(255, 0, 85, 0.28)' : 'rgba(168, 85, 247, 0.22)');
+    auraGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = auraGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, this.r * 1.35 + pulse, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Outer Rotating Crystalline Hull Plates
     ctx.save();
     ctx.rotate(this.angle);
-    ctx.strokeStyle = this.enraged ? '#ff5577' : '#c084fc';
-    ctx.lineWidth = 3;
+
+    // Dark Obsidian Hull Plate Fill
     ctx.beginPath();
     const sides = 8;
     for (let i = 0; i < sides; i++) {
       const a = (i / sides) * Math.PI * 2;
-      const rad = this.r * (i % 2 === 0 ? 1.0 : 0.75);
+      const rad = this.r * (i % 2 === 0 ? 1.0 : 0.78);
       const px = Math.cos(a) * rad;
       const py = Math.sin(a) * rad;
       if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
     }
     ctx.closePath();
+    ctx.fillStyle = CONFIG.BOSS.COLORS.HULL;
+    ctx.fill();
+
+    // Neon Luminous Border
+    ctx.strokeStyle = ringColor;
+    ctx.lineWidth = 3.2;
+    ctx.shadowColor = ringColor;
+    ctx.shadowBlur = this.enraged ? 24 : 16;
     ctx.stroke();
 
-    // Inner pulsating core
-    ctx.fillStyle = this.enraged ? '#ff0055' : '#7e22ce';
+    // Internal Hull Circuit Lines
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+    ctx.lineWidth = 1.2;
     ctx.beginPath();
-    ctx.arc(0, 0, 24 + Math.sin(Date.now() * 0.005) * 4, 0, Math.PI * 2);
-    ctx.fill();
+    for (let i = 0; i < sides; i += 2) {
+      const a = (i / sides) * Math.PI * 2;
+      const px = Math.cos(a) * this.r * 0.85;
+      const py = Math.sin(a) * this.r * 0.85;
+      ctx.moveTo(0, 0);
+      ctx.lineTo(px, py);
+    }
+    ctx.stroke();
     ctx.restore();
 
-    // Orbiting shield fragments
+    // 3. Counter-Rotating Inner Glyphs Ring
+    ctx.save();
+    ctx.rotate(-this.angle * 1.5);
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 1.5;
+    ctx.shadowColor = '#38bdf8';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.arc(0, 0, 36, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    // 4. Central Singularity Core
+    const corePulse = 24 + Math.sin(Date.now() * 0.008) * 4;
+    ctx.fillStyle = coreColor;
+    ctx.shadowColor = coreColor;
+    ctx.shadowBlur = this.enraged ? 30 : 20;
+    ctx.beginPath();
+    ctx.arc(0, 0, corePulse, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Singularity White Hot Center
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(0, 0, corePulse * 0.45, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 5. Orbiting Hexagonal Shield Satellites
     for (const s of this.shields) {
       const sx = Math.cos(s.angle) * s.r;
       const sy = Math.sin(s.angle) * s.r;
-      ctx.fillStyle = '#67e8f9';
-      ctx.shadowColor = '#06b6d4';
-      ctx.shadowBlur = 10;
+
+      ctx.save();
+      ctx.translate(sx, sy);
+      ctx.rotate(s.angle * 2);
+
+      // Hexagonal Shield Drone Base
       ctx.beginPath();
-      ctx.arc(sx, sy, s.size, 0, Math.PI * 2);
+      for (let k = 0; k < 6; k++) {
+        const hexAngle = (k / 6) * Math.PI * 2;
+        const hx = Math.cos(hexAngle) * s.size;
+        const hy = Math.sin(hexAngle) * s.size;
+        if (k === 0) ctx.moveTo(hx, hy); else ctx.lineTo(hx, hy);
+      }
+      ctx.closePath();
+      ctx.fillStyle = CONFIG.BOSS.COLORS.SHIELD_FILL;
       ctx.fill();
+
+      ctx.strokeStyle = CONFIG.BOSS.COLORS.SHIELD_BORDER;
+      ctx.lineWidth = 2.2;
+      ctx.shadowColor = CONFIG.BOSS.COLORS.SHIELD_BORDER;
+      ctx.shadowBlur = 12;
+      ctx.stroke();
+
+      // Shield Center Core
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
     }
 
     ctx.restore();
 
-    // Draw Boss Bullets
-    ctx.fillStyle = this.enraged ? '#ff0055' : '#c084fc';
-    ctx.shadowColor = this.enraged ? '#ff0055' : '#c084fc';
-    ctx.shadowBlur = 10;
+    // 6. Draw Radiant Boss Projectiles
     for (const b of this.bullets) {
+      ctx.save();
+      ctx.translate(b.x, b.y);
+
+      // Outer Energy Glow
+      ctx.fillStyle = this.enraged ? '#ff0055' : '#c084fc';
+      ctx.shadowColor = this.enraged ? '#ff0055' : '#c084fc';
+      ctx.shadowBlur = 14;
       ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      ctx.arc(0, 0, b.r + 2, 0, Math.PI * 2);
       ctx.fill();
+
+      // White-Hot Inner Core
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.arc(0, 0, b.r * 0.55, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
     }
   }
 }

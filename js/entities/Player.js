@@ -61,7 +61,7 @@ export class Player extends Entity {
     return true;
   }
 
-  update(inputHandler, dt = 1.0) {
+  update(inputHandler, dt = 1.0, particleSystem = null) {
     const rotSpeed = CONFIG.SHIP.ROTATION_SPEED * dt;
     const thrust = CONFIG.SHIP.THRUST * dt;
 
@@ -85,6 +85,12 @@ export class Player extends Entity {
       this.vy += Math.sin(this.angle) * thrust;
       this.thrusting = true;
       SoundSystem.playThrust();
+
+      if (particleSystem) {
+        const exhaustX = this.x - Math.cos(this.angle) * (this.r * 0.8);
+        const exhaustY = this.y - Math.sin(this.angle) * (this.r * 0.8);
+        particleSystem.spawnThrustParticle(exhaustX, exhaustY, this.angle);
+      }
     } else {
       SoundSystem.stopThrust();
     }
@@ -133,29 +139,85 @@ export class Player extends Entity {
       ctx.globalAlpha = 0.35;
     }
 
-    ctx.strokeStyle = CONFIG.SHIP.COLORS.BODY;
-    ctx.lineWidth = 2;
-    ctx.shadowColor = CONFIG.SHIP.COLORS.SHADOW;
-    ctx.shadowBlur = 10;
+    // 1. Dark Metallic Hull Base
     ctx.beginPath();
-    ctx.moveTo(16, 0);
-    ctx.lineTo(-12, 10);
-    ctx.lineTo(-7, 0);
-    ctx.lineTo(-12, -10);
+    ctx.moveTo(18, 0);
+    ctx.lineTo(-12, 12);
+    ctx.lineTo(-7, 3);
+    ctx.lineTo(-10, 0);
+    ctx.lineTo(-7, -3);
+    ctx.lineTo(-12, -12);
     ctx.closePath();
+    ctx.fillStyle = CONFIG.SHIP.COLORS.HULL_FILL;
+    ctx.fill();
+
+    // 2. Electric Cyan Neon Outer Glow
+    ctx.strokeStyle = CONFIG.SHIP.COLORS.PRIMARY_NEON;
+    ctx.lineWidth = 2.2;
+    ctx.shadowColor = CONFIG.SHIP.COLORS.SHADOW;
+    ctx.shadowBlur = 14;
     ctx.stroke();
 
+    // 3. Wingtip Stabilizer Accents (Hot Magenta)
+    ctx.strokeStyle = CONFIG.SHIP.COLORS.SECONDARY_NEON;
+    ctx.shadowColor = CONFIG.SHIP.COLORS.SECONDARY_NEON;
+    ctx.shadowBlur = 8;
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.moveTo(-4, 7);
+    ctx.lineTo(-12, 12);
+    ctx.moveTo(-4, -7);
+    ctx.lineTo(-12, -12);
+    ctx.stroke();
+
+    // 4. Glowing Cockpit Visor
+    ctx.fillStyle = CONFIG.SHIP.COLORS.CANOPY;
+    ctx.shadowColor = CONFIG.SHIP.COLORS.CANOPY;
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.ellipse(3, 0, 5, 2.2, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Visor core glint
+    ctx.fillStyle = CONFIG.SHIP.COLORS.CANOPY_CORE;
+    ctx.beginPath();
+    ctx.ellipse(4, 0, 2.5, 1, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 5. Multi-Layer Ion Thruster Flame
     if (this.thrusting) {
-      const flameFlicker = Math.random() * 8;
-      ctx.strokeStyle = CONFIG.SHIP.COLORS.THRUST;
-      ctx.shadowColor = CONFIG.SHIP.COLORS.THRUST;
+      const flicker = Math.random() * 8;
+      
+      // Outer Plasma Flame (Magenta)
+      ctx.strokeStyle = CONFIG.SHIP.COLORS.THRUST_OUTER;
+      ctx.shadowColor = CONFIG.SHIP.COLORS.THRUST_OUTER;
+      ctx.shadowBlur = 14;
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(-7, 0);
-      ctx.lineTo(-18 - flameFlicker, 0);
-      ctx.moveTo(-8, -4);
-      ctx.lineTo(-14, -1);
-      ctx.moveTo(-8, 4);
-      ctx.lineTo(-14, 1);
+      ctx.moveTo(-9, 0);
+      ctx.lineTo(-22 - flicker, 0);
+      ctx.moveTo(-7, -3);
+      ctx.lineTo(-15 - flicker * 0.6, -1);
+      ctx.moveTo(-7, 3);
+      ctx.lineTo(-15 - flicker * 0.6, 1);
+      ctx.stroke();
+
+      // Mid Flame (Cyan)
+      ctx.strokeStyle = CONFIG.SHIP.COLORS.THRUST_MID;
+      ctx.shadowColor = CONFIG.SHIP.COLORS.THRUST_MID;
+      ctx.shadowBlur = 8;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(-8, 0);
+      ctx.lineTo(-16 - flicker * 0.7, 0);
+      ctx.stroke();
+
+      // Inner White Core
+      ctx.strokeStyle = CONFIG.SHIP.COLORS.THRUST_CORE;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(-8, 0);
+      ctx.lineTo(-12, 0);
       ctx.stroke();
     }
 
@@ -163,14 +225,30 @@ export class Player extends Entity {
   }
 
   drawBullets(ctx) {
-    ctx.fillStyle = CONFIG.WEAPON.COLOR;
-    ctx.shadowColor = CONFIG.WEAPON.COLOR;
-    ctx.shadowBlur = 8;
     for (let i = 0; i < this.bullets.length; i++) {
       const b = this.bullets[i];
+      const bulletAngle = Math.atan2(b.vy, b.vx);
+
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(bulletAngle);
+
+      // Outer Cyan Energy Bloom
+      ctx.shadowColor = CONFIG.WEAPON.COLOR_GLOW;
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = CONFIG.WEAPON.COLOR_GLOW;
       ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      ctx.ellipse(0, 0, 7, 2.8, 0, 0, Math.PI * 2);
       ctx.fill();
+
+      // Inner White-Hot Plasma Core
+      ctx.fillStyle = CONFIG.WEAPON.COLOR_CORE;
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.ellipse(1, 0, 4.5, 1.4, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
     }
   }
 }
